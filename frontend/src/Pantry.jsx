@@ -1,5 +1,6 @@
 // src/Pantry.jsx
 import { useEffect, useRef, useState } from "react";
+import { Quagga } from "quagga";
 
 export default function Pantry() {
   const [items, setItems] = useState([]);                 // [{id, title, brand, barcode}]
@@ -10,6 +11,7 @@ export default function Pantry() {
   const streamRef = useRef(null);
   const rafRef = useRef(0);
   const detectorRef = useRef(null);
+  
 
   // Start the camera + scanning loop
   const startScan = async () => {
@@ -176,11 +178,20 @@ export default function Pantry() {
               }}
             >
               <video
-                ref={videoRef}
-                muted
-                playsInline
-                style={{ width: "100%", maxHeight: 360, objectFit: "cover" }}
-              />
+  ref={videoRef}
+  autoPlay
+  playsInline
+  muted
+  style={{ width: "100%", maxHeight: 360, objectFit: "cover", background: "#000" }}
+/>
+
+<div className="camera">
+
+</div>
+
+
+
+
             </div>
           )}
           {error && (
