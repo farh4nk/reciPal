@@ -11,3 +11,21 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+// ... existing React import/setup code in main.jsx ...
+
+// Add this block below your ReactDOM.createRoot(...) call
+document.addEventListener('DOMContentLoaded', () => {
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+
+    if (cursorDot && cursorRing) {
+        document.addEventListener('mousemove', (e) => {
+            // Update the dot position immediately
+            cursorDot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            
+            // Update the ring position
+            cursorRing.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+    }
+});
