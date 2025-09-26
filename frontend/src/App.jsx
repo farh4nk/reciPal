@@ -7,6 +7,7 @@ import GroceryList from "./GroceryList.jsx";
 import RecipeCard from "./RecipeCard.jsx";
 import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
+import NewRecipe from "./NewRecipe.jsx";
 
 function App() {
   return (
@@ -14,8 +15,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-  <Route path="/recipes" element={<Recipes />} />
-  <Route path="/recipes/:id" element={<RecipeCard />} />
+        <Route path="/recipes" element={<Recipes />} />
+        {/* support both /recipes/new (new recipe form) and /recipes/:id (view) */}
+        <Route path="/recipes/new" element={<NewRecipe />} />
+        <Route path="/recipes/:id" element={<RecipeCard />} />
         <Route path="/pantry" element={<Pantry />} />
         <Route path="/grocery" element={<GroceryList />} />
         <Route path="/login" element={<Login />} />
@@ -23,7 +26,14 @@ function App() {
         {/* Optional placeholders for links shown on Home */}
         {/* Optional placeholders for links shown on Home */}
         {/* Optional placeholders for links shown on Home */}
-        <Route path="*" element={<div className="container" style={{padding:"32px 20px"}}>Page not found.</div>} />
+        <Route
+          path="*"
+          element={
+            <div className="container" style={{ padding: "32px 20px" }}>
+              Page not found.
+            </div>
+          }
+        />
       </Routes>
     </>
   );

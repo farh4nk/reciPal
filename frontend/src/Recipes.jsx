@@ -6,6 +6,8 @@ const mockRecipe = {
   // future fields (generated from audio) will live in DB
 };
 
+
+
 export default function Recipes() {
   return (
     <main className="page">
