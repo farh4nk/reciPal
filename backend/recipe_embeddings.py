@@ -47,7 +47,7 @@ for ingredient in recipe_ingredients_set:
 
 from google import genai
 from google.genai import types
-client = genai.Client(api_key='AIzaSyBAMw4tuXz9Df_Z-sS-_P_yP-ViS9fMbKk')
+client = genai.Client(api_key='')
 
 result = [
     np.array(e.values) for e in client.models.embed_content(
