@@ -17,6 +17,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/recipes' element={<Recipes />}></Route>
           <Route path='/pantry' element={<Pantry />}></Route>
           <Route path='/user' element={<User />}></Route>
+          <Route path='/login' element={<Login />}></Route>
         </Routes>
       </BrowserRouter>
   </StrictMode>,
