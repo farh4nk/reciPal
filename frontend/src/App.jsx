@@ -1,27 +1,32 @@
-import { useState } from 'react'
-import { Link } from 'react-router'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import './App.css'
-import Navbar from './Navbar'
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar";
+import Home from "./Home";
+import Recipes from "./Recipes.jsx";
+import Pantry from "./Pantry.jsx";
+import GroceryList from "./GroceryList.jsx";
+import RecipeCard from "./RecipeCard.jsx";
+import Login from "./Login.jsx";
+import Signup from "./Signup.jsx";
 
 function App() {
-
   return (
     <>
       <Navbar />
-      <h1>reciPal</h1>
-
-      <div>
-        <h3>Hello, ___</h3>
-         main content here
-      </div>
-
-      <p>
-        footer here
-      </p>
+      <Routes>
+        <Route path="/" element={<Home />} />
+  <Route path="/recipes" element={<Recipes />} />
+  <Route path="/recipes/:id" element={<RecipeCard />} />
+        <Route path="/pantry" element={<Pantry />} />
+        <Route path="/grocery" element={<GroceryList />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        {/* Optional placeholders for links shown on Home */}
+        {/* Optional placeholders for links shown on Home */}
+        {/* Optional placeholders for links shown on Home */}
+        <Route path="*" element={<div className="container" style={{padding:"32px 20px"}}>Page not found.</div>} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
