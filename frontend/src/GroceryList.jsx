@@ -4,7 +4,6 @@ import Navbar from './Navbar'
 const GroceryList = () => {
   return (
     <div>
-        <Navbar />
         GroceryList
     </div>
   )
