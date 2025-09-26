@@ -7,6 +7,7 @@ import GroceryList from "./GroceryList.jsx";
 import RecipeCard from "./RecipeCard.jsx";
 import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
+import User from "./User.jsx";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/grocery" element={<GroceryList />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/user" element={<User />} />
         {/* Optional placeholders for links shown on Home */}
         {/* Optional placeholders for links shown on Home */}
         {/* Optional placeholders for links shown on Home */}
