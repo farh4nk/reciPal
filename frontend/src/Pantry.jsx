@@ -129,41 +129,85 @@ export default function Pantry() {
 
   return (
     <main className="page">
-      <div className="page__head container">
+      <div
+        className="page__head container"
+        style={{
+          display: "flex", // Use flexbox
+          justifyContent: "space-between", // Push content to the edges
+          alignItems: "flex-start", // Align items to the top
+          marginBottom: "2rem",
+        }}
+      >
+        {/* LEFT SIDE: Title, Subtitle, and Scan Button */}
         <div>
           <h1 className="page__title">Your Pantry</h1>
           <p className="page__subtitle">
             Scan a barcode to add items. Search to quickly find what you have.
           </p>
+          
+          {/* Scan/Stop Button */}
+          <div style={{ display: "flex", gap: 10, marginTop: '1rem' }}>
+            {!scanning ? (
+              <button className="btn btn--solid" onClick={startScan}>
+                📷 Scan Barcode
+              </button>
+            ) : (
+              <button className="btn btn--ghost" onClick={stopScan}>
+                ✖ Stop
+              </button>
+            )}
+          </div>
         </div>
 
-        <div style={{ display: "flex", gap: 10 }}>
-          {!scanning ? (
-            <button className="btn btn--solid" onClick={startScan}>
-              📷 Scan Barcode
-            </button>
-          ) : (
-            <button className="btn btn--ghost" onClick={stopScan}>
-              ✖ Stop
-            </button>
-          )}
-        </div>
+        {/* RIGHT SIDE: Search bar - NOW INSIDE THE HEADER DIV */}
+        <section
+          // Removed the problematic large marginTop
+          style={{ width: '250px', padding: 0, marginTop: '7.9rem' }} 
+        >
+          <div
+            className="searchbar"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "1px solid #e0e0e0",
+              borderRadius: "25px", // Fully rounded
+              padding: "0.5rem 1rem",
+              backgroundColor: "#ffffff",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06)", // Subtle lift
+              width: "100%",
+            }}
+          >
+            <span
+              className="searchbar__icon"
+              aria-hidden
+              style={{
+                marginRight: "0.75rem",
+                fontSize: "1.2rem",
+                color: "#757575",
+              }}
+            >
+              🔎
+            </span>
+            <input
+              className="searchbar__input"
+              placeholder="Search pantry…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={{
+                border: "none",
+                outline: "none",
+                background: "transparent",
+                padding: 0,
+                fontSize: "1rem",
+                color: "#333",
+                width: "100%",
+              }}
+            />
+          </div>
+        </section>
       </div>
-
-      {/* Search bar */}
-      <section className="container">
-        <div className="searchbar">
-          <span className="searchbar__icon" aria-hidden>
-            🔎
-          </span>
-          <input
-            className="searchbar__input"
-            placeholder="Search pantry…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
-      </section>
+      
+  
 
       {/* Scanner preview + errors */}
       {(scanning || error) && (

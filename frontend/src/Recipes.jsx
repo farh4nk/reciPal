@@ -24,26 +24,74 @@ export default function Recipes() {
 
   return (
     <main className="page">
-      {/* Page header */}
-      <div className="page__head container">
+      {/* Page header and Search combined */}
+      <div
+        className="page__head container"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start", // Align items to the top
+          marginBottom: "2rem",
+        }}
+      >
+        {/* LEFT SIDE: Title, Subtitle, and CTA Button */}
         <div>
           <h1 className="page__title">Recipe Collection</h1>
-          <p className="page__subtitle">
+          <p className="page__subtitle" style={{ marginBottom: "1rem" }}>
             Discover and share recipes transcribed from your audio/video.
           </p>
+          <Link to="/recipes/new" className="btn btn--solid page__cta">
+            ＋ Add Recipe
+          </Link>
         </div>
-        <Link to="/recipes/new" className="btn btn--solid page__cta">
-          ＋ Add Recipe
-        </Link>
+
+        {/* RIGHT SIDE: Search bar */}
+        <section
+          style={{ width: '250px', padding: 0, marginTop: '8.0rem' }} // Align search bar visually
+        >
+          <div
+            className="searchbar"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "1px solid #e0e0e0",
+              borderRadius: "25px", 
+              padding: "0.5rem 1rem",
+              backgroundColor: "#ffffff",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06)",
+              width: "100%",
+            }}
+          >
+            <span
+              className="searchbar__icon"
+              aria-hidden
+              style={{
+                marginRight: "0.75rem",
+                fontSize: "1.2rem",
+                color: "#757575",
+              }}
+            >
+              🔎
+            </span>
+            <input
+              className="searchbar__input"
+              placeholder="Search recipe titles…"
+              // You'll need to add value={query} and onChange={(e) => setQuery(e.target.value)} here
+              style={{
+                border: "none",
+                outline: "none",
+                background: "transparent",
+                padding: 0,
+                fontSize: "1rem",
+                color: "#333",
+                width: "100%",
+              }}
+            />
+          </div>
+        </section>
       </div>
 
-      {/* Search */}
-      <section className="container">
-        <div className="searchbar">
-          <span className="searchbar__icon" aria-hidden>🔎</span>
-          <input className="searchbar__input" placeholder="Search recipe titles…" />
-        </div>
-      </section>
+    
 
       {/* Grid */}
       <section className="grid grid--recipes">
