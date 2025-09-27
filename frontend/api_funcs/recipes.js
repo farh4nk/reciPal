@@ -1,11 +1,14 @@
 const BASE = "http://127.0.0.1:8000/api/recipes";
 
-
-async function request(path, { method = "GET", headers = {}, body, signal } = {}) {
+async function request(
+  path,
+  { method = "GET", headers = {}, body, signal } = {}
+) {
   const url = `${BASE}${path}`;
 
   // If body is a plain object, send JSON
-  const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+  const isFormData =
+    typeof FormData !== "undefined" && body instanceof FormData;
   if (body && !isFormData && !headers["Content-Type"]) {
     headers["Content-Type"] = "application/json";
     body = JSON.stringify(body);
@@ -23,7 +26,8 @@ async function request(path, { method = "GET", headers = {}, body, signal } = {}
 
   if (!res.ok) {
     const msg =
-      (data && (data.detail || data.error || JSON.stringify(data))) || res.statusText;
+      (data && (data.detail || data.error || JSON.stringify(data))) ||
+      res.statusText;
     const err = new Error(msg);
     err.status = res.status;
     err.data = data;
@@ -59,10 +63,10 @@ export function createRecipeFromReel(reelUrl, opts) {
 }
 
 // PUT /api/recipes/edit  Body: { title, data: {...} } -> replaces JSON fully
-export function editRecipe(title, dataObj, opts) {
+export function editRecipe(id, dataObj, opts) {
   return request(`/edit`, {
-    method: "PUT",
-    body: { title, data: dataObj },
+    method: "POST",
+    body: { id: id, data: dataObj },
     ...opts,
   });
 }

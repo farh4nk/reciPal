@@ -70,8 +70,9 @@ export default function NewRecipe() {
           <input
             aria-label="Recipe title"
             name="title"
-            className="searchbar__input" // Keep this class for general input styling
-            placeholder="Recipe title..."
+            className="searchbar__input"
+            placeholder="Recipe Link..."
+            style={{ maxWidth: 560, width: "60%" }}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             style={{

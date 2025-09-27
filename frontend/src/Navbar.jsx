@@ -30,7 +30,7 @@ export default function Navbar() {
         {/* Right: Actions */}
         <div className="navbar__actions">
           <Link to="/login" className="navbar__action">Login</Link>
-          <Link to="/user" className="navbar__avatar" aria-label="User Profile">👤</Link>
+          <Link to="/user" className="navbar__avatar" aria-label="User Profile">🧑‍🍳</Link>
         </div>
       </div>
     </header>
