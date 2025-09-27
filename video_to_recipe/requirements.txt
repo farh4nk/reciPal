@@ -1,0 +1,5 @@
+yt-dlp
+requests
+google-generativeai
+google-genai
+dotenv
