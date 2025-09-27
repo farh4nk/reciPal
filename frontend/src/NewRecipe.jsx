@@ -72,7 +72,6 @@ export default function NewRecipe() {
             name="title"
             className="searchbar__input"
             placeholder="Recipe Link..."
-            style={{ maxWidth: 560, width: "60%" }}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             style={{
