@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -8,39 +7,19 @@ from rest_framework import status, permissions
 
 from .models import Recipe
 from .serializers import RecipeSerializer
-from .services import generate_recipe_json_from_media
+from .services import transcribe_and_extract_recipe
 
-User = get_user_model()
-
-class GetRecipeByTitle(APIView):
+class GetRecipeById(APIView):
     """
     GET /api/recipes/get/<title>
     Return the raw JSON from the DB (recipe.data) for the current user's recipe.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
-    def get(self, request, title: str):
-        recipe = get_object_or_404(
-            Recipe.objects.filter(user=request.user),
-            title__iexact=title.strip()
-        )
+    def get(self, request, id: str):
+        recipe = Recipe.objects.get(pk=id)
         # "Just literally" return the JSON payload you stored:
         return Response(recipe.data, status=status.HTTP_200_OK)
-
-
-class GetRecipesByUser(APIView):
-    """
-    GET /api/recipes/get/user/<username>
-    Return all recipes for that user. (Owner-only for privacy.)
-    """
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, username: str):
-        if username != request.user.username:
-            return Response({"detail": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
-
-        qs = Recipe.objects.filter(user=request.user).order_by("-created_at")
-        return Response(RecipeSerializer(qs, many=True).data, status=status.HTTP_200_OK)
 
 
 class SearchRecipesByTitle(APIView):
@@ -48,47 +27,53 @@ class SearchRecipesByTitle(APIView):
     GET /api/recipes/get/search/<title>
     Case-insensitive search in the current user's titles.
     """
-
+    permission_classes = [permissions.AllowAny]
     def get(self, request, title: str):
         qs = Recipe.objects.filter(title__icontains=title.strip())[:50]
         return Response(RecipeSerializer(qs, many=True).data, status=status.HTTP_200_OK)
     
 class AllRecipes(APIView):
-
+    permission_classes = [permissions.AllowAny]
+    
     def get(self, request):
-        qs = Recipe.objects.all()[:50]
+        qs = Recipe.objects.all()
         return Response(RecipeSerializer(qs, many=True).data, status=status.HTTP_200_OK)
-
-
+    
 class CreateRecipe(APIView):
     """
     POST /api/recipes/create
-    Multipart form:
+    Body (JSON or form-data):
       - title: str (required)
-      - file: mp3/mp4 (required)  -> parsed with Gemini into JSON
-    Returns the created object.
+      - reel_url (or url): str (required) -> Instagram reel/post URL
+
+    Behavior:
+      - Validates Instagram URL
+      - Downloads the reel (your function)
+      - Runs Gemini transcription/extraction
+      - Saves Recipe(owner,title,data)
     """
-    permission_classes = [permissions.IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser, JSONParser]
+    permission_classes = [permissions.AllowAny]
+    parser_classes = [JSONParser, FormParser]
 
     def post(self, request):
-        title = (request.data.get("title") or "").strip()
-        file_obj = request.FILES.get("file")
+        reel_url = (request.data.get("reel_url") or request.data.get("url") or "").strip()
 
-        if not title:
-            return Response({"title": "This field is required."}, status=400)
-        if not file_obj:
-            return Response({"file": "Upload an mp3/mp4 file."}, status=400)
+        if not reel_url:
+            return Response({"reel_url": "Provide an Instagram reel URL."}, status=400)
 
         try:
-            # ---- integrate Gemini here (stub call) ----
-            data = generate_recipe_json_from_media(file_obj)
-            # -------------------------------------------
+            data = transcribe_and_extract_recipe(reel_url)
         except NotImplementedError:
-            # Soft fallback so you can test the flow before wiring Gemini:
-            data = {"transcript": "", "ingredients": [], "notes": "TODO: wire Gemini"}
+            # Soft fallback → lets you test end-to-end before you wire the downloader & Gemini
+            data = {"transcript": "", "ingredients": [], "notes": "TODO: wire IG downloader + Gemini"}
+        except ValueError as ve:
+            return Response({"reel_url": str(ve)}, status=400)
+        except FileNotFoundError as fe:
+            return Response({"reel_url": str(fe)}, status=422)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
 
-        recipe = Recipe(user=request.user, title=title, data=data)
+        recipe = Recipe(title=data["name"], data=data)
         try:
             recipe.save()
         except IntegrityError:
@@ -109,7 +94,7 @@ class EditRecipe(APIView):
         "data": { ...any JSON... }   # this will fully replace the stored JSON
       }
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
 
     def put(self, request):
@@ -125,10 +110,8 @@ class EditRecipe(APIView):
         if "data" not in request.data:
             return Response({"data": "Provide the JSON payload to store."}, status=400)
 
-        recipe = get_object_or_404(
-            Recipe.objects.filter(user=request.user),
-            title__iexact=title
-        )
+        recipe = Recipe.objects.filter(title__iexact=title.strip()).first()
+
         recipe.data = request.data["data"]
         recipe.save()
         return Response(RecipeSerializer(recipe).data, status=status.HTTP_200_OK)

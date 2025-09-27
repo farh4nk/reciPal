@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {signin} from "../api_funcs/auth.js";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", username: "", password: "" });
@@ -7,9 +8,12 @@ export default function Login() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // TODO: replace with backend login call
+    result = await signin(form.username, form.password);
+    if(result){
+      window.location.href = ""
+    }
     console.log("Logging in:", form);
   };
 
@@ -55,7 +59,7 @@ export default function Login() {
           />
         </label>
 
-        <button type="submit" className="btn btn--solid" style={{ width: "100%" }}>
+        <button type="submit" className="btn btn--solid" onSubmit={handleSubmit} style={{ width: "100%" }}>
           Login
         </button>
 

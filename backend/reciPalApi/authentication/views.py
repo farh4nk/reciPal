@@ -9,6 +9,7 @@ class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
 
 class MeView(APIView):
+    permission_classes = [permissions.AllowAny]
     def get(self, request):
         return Response(UserSerializer(request.user).data)
 

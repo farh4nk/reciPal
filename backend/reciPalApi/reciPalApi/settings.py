@@ -15,6 +15,13 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv(BASE_DIR / ".env")
+
+GEMINI_API_KEY = os.getenv("GEMINI")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -40,7 +47,7 @@ INSTALLED_APPS = [
     'authentication',
     'recipes',
     'rest_framework',
-    'corsheaders',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -51,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'reciPalApi.urls'
@@ -115,7 +123,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -127,11 +134,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# allow your React dev server to call the API
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite default
-    "http://localhost:3000",  # CRA default
-]
 # or during development (less strict):
 # CORS_ALLOW_ALL_ORIGINS = True
 
@@ -150,3 +152,24 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=210),
 }
+
+# from corsheaders.defaults import default_headers, default_methods
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:5173",
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+# ]
+# # If you’re unsure, you can temporarily do:
+# # CORS_ALLOW_ALL_ORIGINS = True  # (dev only)
+
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     "authorization",  # preflight will ask permission to send this header
+#     "content-type",
+# ]
+
+# CORS_ALLOW_METHODS = list(default_methods) + ["OPTIONS"]
+# CORS_PREFLIGHT_MAX_AGE = 86400  # cache preflight (optional)
+
+CORS_ALLOW_ALL_ORIGINS = True

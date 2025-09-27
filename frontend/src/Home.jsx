@@ -16,7 +16,6 @@ export default function Home() {
 
         <div className="hero__cta">
           <Link to="/recipes" className="btn btn--solid">🍲 Explore Recipes</Link>
-          <Link to="/ai" className="btn btn--ghost">✨ Try AI Features</Link>
         </div>
       </section>
 

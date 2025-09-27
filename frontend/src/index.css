@@ -464,3 +464,52 @@ body.has-fixed-navbar main{
   border-color:var(--accent);
   box-shadow:0 0 0 2px var(--ring);
 }
+
+/* ===== Custom Cursor ===== */
+body {
+  /* cursor: none !important;  (Keep this removed/commented out) */
+}
+
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  /* REMOVED: mix-blend-mode: exclusion; */ 
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent); /* Your terracotta color */
+  transition: opacity 0.1s ease;
+}
+
+.cursor-ring {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--accent); /* Your terracotta color */
+  transition: transform 0.15s ease-out, width 0.3s ease-in-out, height 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+/* Cursor change when hovering over interactive elements */
+a:hover ~ .cursor-dot,
+.btn:hover ~ .cursor-dot,
+/* ... (other selectors) ... */
+.auth-input:focus ~ .cursor-dot {
+    opacity: 0;
+}
+
+a:hover ~ .cursor-ring,
+.btn:hover ~ .cursor-ring,
+/* ... (other selectors) ... */
+.auth-input:focus ~ .cursor-ring {
+    width: 60px;
+    height: 60px;
+    /* CHANGE: Set the border color to your white/light background for contrast on hover */
+    border-color: var(--surface); 
+}

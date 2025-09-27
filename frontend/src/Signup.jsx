@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {signup} from "../api_funcs/auth.js";
 
 export default function Signup() {
   const [form, setForm] = useState({ email: "", username: "", password: "" });
@@ -7,9 +8,9 @@ export default function Signup() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // TODO: replace with backend signup call
+    await signup(form.username, form.email, form.password);
     console.log("Signing up:", form);
   };
 

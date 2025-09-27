@@ -41,7 +41,6 @@ class EmailOrUsernameTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         login = attrs.get("login")
         password = attrs.get("password")
-        user = None
 
         if "@" in login:
             try:
