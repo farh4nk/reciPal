@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
+import {me} from "../api_funcs/auth.js";
+import { useEffect } from "react";
 
 export default function User() {
-  // TODO: replace with real DB/user context
-  const user = { username: "Chef", email: "you@example.com" };
+  let user = null
+  useEffect(async() => {
+    user = await me();
+  }, [])
   const savedRecipes = [
     { id: "creamy-mushroom-risotto", title: "Creamy Mushroom Risotto" },
     { id: "lemon-pepper-chicken", title: "Lemon Pepper Chicken" },
