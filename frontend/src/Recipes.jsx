@@ -3,6 +3,8 @@ import { getAllRecipes} from "../api_funcs/recipes.js";
 
 const recipes = await getAllRecipes();
 
+
+
 export default function Recipes() {
   return (
     <main className="page">
