@@ -11,7 +11,6 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 recipe_documents = []
-recipe_ids = []
 ingredients_set = []
 EMBEDDINGS_DB = {} 
 RECIPES_DB = {} 
