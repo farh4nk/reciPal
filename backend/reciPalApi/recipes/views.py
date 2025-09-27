@@ -97,22 +97,22 @@ class EditRecipe(APIView):
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
 
-    def put(self, request):
+    def post(self, request):
         return self._update(request)
 
     def patch(self, request):
         return self._update(request)
 
     def _update(self, request):
-        title = (request.data.get("title") or "").strip()
-        if not title:
+        idd = request.data.get("id")
+        if not idd:
             return Response({"title": "This field is required."}, status=400)
         if "data" not in request.data:
             return Response({"data": "Provide the JSON payload to store."}, status=400)
 
-        recipe = Recipe.objects.filter(title__iexact=title.strip()).first()
+        recipe = Recipe.objects.get(pk=idd)
 
-        recipe.data = request.data["data"]
+        recipe.data = request.data.get("data")
         recipe.save()
         return Response(RecipeSerializer(recipe).data, status=status.HTTP_200_OK)
 
