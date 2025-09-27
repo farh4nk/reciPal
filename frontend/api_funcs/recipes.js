@@ -1,4 +1,4 @@
-const BASE = "http://127.0.0.1:8000/recipes";
+const BASE = "http://127.0.0.1:8000/api/recipes";
 
 
 async function request(path, { method = "GET", headers = {}, body, signal } = {}) {
@@ -35,8 +35,8 @@ async function request(path, { method = "GET", headers = {}, body, signal } = {}
 // ---------- Endpoints (no auth) ----------
 
 // GET /api/recipes/get/<title>  -> returns raw recipe.data JSON
-export function getRecipeByTitle(title, opts) {
-  return request(`/get/${encodeURIComponent(title)}`, opts);
+export function getRecipeById(id, opts) {
+  return request(`/get/${encodeURIComponent(id)}`, opts);
 }
 
 // GET /api/recipes/get/search/<title> -> returns array of RecipeSerializer items

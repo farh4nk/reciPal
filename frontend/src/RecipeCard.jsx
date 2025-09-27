@@ -1,32 +1,27 @@
 import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getRecipeById } from "../api_funcs/recipes.js";
 
 export default function RecipeCard() {
-  // when wired to DB, fetch recipe by id from params
   const { id } = useParams();
+  const [recipe, setRecipe] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Mock recipe object
-  const recipe = {
-    id: "creamy-mushroom-risotto",
-    title: "Creamy Mushroom Risotto",
-    author: "Chef Maria",
-    transcript:
-      "This recipe was transcribed from audio. We'll cook mushrooms, toast arborio rice, and slowly add stock until creamy. Finish with parmesan.",
-    ingredients: [
-      "1 cup arborio rice",
-      "2 cups vegetable stock",
-      "1 cup mushrooms (sliced)",
-      "1/2 cup grated parmesan",
-      "2 tbsp olive oil",
-      "Salt & pepper to taste",
-    ],
-    steps: [
-      "Heat olive oil in a pan and sauté mushrooms.",
-      "Add rice and toast for 1–2 minutes.",
-      "Gradually add warm stock, stirring until absorbed.",
-      "Continue until rice is creamy and tender.",
-      "Stir in parmesan and season with salt & pepper.",
-    ],
-  };
+  useEffect(() => {
+    const ac = new AbortController();
+    (async () => {
+      try {
+        const data = await getRecipeById(id, { signal: ac.signal });
+        setRecipe({ ...data, author: "Mr. Robot" });
+      } catch (e) {
+        if (e.name !== "AbortError") setError(e);
+      }
+    })();
+    return () => ac.abort();
+  }, [id]);
+
+  if (error) return <main className="page container">Error: {String(error.message || error)}</main>;
+  if (!recipe) return <main className="page container">Loading…</main>;
 
   return (
     <main className="page container">
@@ -38,13 +33,13 @@ export default function RecipeCard() {
           <p className="recipe-detail__author">by {recipe.author}</p>
         </header>
 
-        <p className="recipe-detail__transcript">{recipe.transcript}</p>
+        <p className="recipe-detail__transcript">{recipe.caption}</p>
 
         <section className="recipe-detail__section">
           <h2>Ingredients</h2>
           <ul className="recipe-detail__list">
-            {recipe.ingredients.map((item, i) => (
-              <li key={i}>{item}</li>
+            {(recipe.ingredients ?? []).map((item, i) => (
+              <li key={i}>{Array.isArray(item) ? item.join(" ") : String(item)}</li>
             ))}
           </ul>
         </section>
@@ -52,9 +47,7 @@ export default function RecipeCard() {
         <section className="recipe-detail__section">
           <h2>Steps</h2>
           <ol className="recipe-detail__list">
-            {recipe.steps.map((step, i) => (
-              <li key={i}>{step}</li>
-            ))}
+            {(recipe.steps ?? []).map((step, i) => <li key={i}>{step}</li>)}
           </ol>
         </section>
       </article>

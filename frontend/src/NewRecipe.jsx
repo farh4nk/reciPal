@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { createRecipeFromReel } from "../api_funcs/recipes.js";
+
 
 export default function NewRecipe() {
   const [inputValue, setInputValue] = React.useState("");
@@ -7,19 +9,14 @@ export default function NewRecipe() {
   const [status, setStatus] = React.useState(null);
 
   // submitLink returns a boolean (true = success, false = failure)
-  const submitLink = async (title) => {
+  const submitLink = async (inputValue) => {
     // Basic validation: ensure this looks like an Instagram link
-    const link = String(title || "").trim();
-    if (!/instagram\.com\//i.test(link)) {
-      // doesn't contain instagram.com/ -> fail quickly
-      return false;
-    }
+    const link = String(inputValue || "").trim();
 
     // Simulate async request; replace with real fetch when ready
     setStatus("pending");
     try {
-      // example: const res = await fetch('/api/recipes', {method: 'POST', body: JSON.stringify({title: link})});
-      // const ok = res.ok;
+      const res = await createRecipeFromReel(inputValue);
       await new Promise((r) => setTimeout(r, 300));
       const ok = true; // toggle to false to simulate failure
       return ok;

@@ -9,15 +9,15 @@ from .models import Recipe
 from .serializers import RecipeSerializer
 from .services import transcribe_and_extract_recipe
 
-class GetRecipeByTitle(APIView):
+class GetRecipeById(APIView):
     """
     GET /api/recipes/get/<title>
     Return the raw JSON from the DB (recipe.data) for the current user's recipe.
     """
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request, title: str):
-        recipe = Recipe.objects.filter(title__iexact=title.strip()).first()
+    def get(self, request, id: str):
+        recipe = Recipe.objects.get(pk=id)
         # "Just literally" return the JSON payload you stored:
         return Response(recipe.data, status=status.HTTP_200_OK)
 
