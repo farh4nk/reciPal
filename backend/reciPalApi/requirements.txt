@@ -1,0 +1,9 @@
+django
+djangorestframework
+django-cors-headers
+djangorestframework-simplejwt
+google-genai
+yt_dlp
+python-dotenv
+ffmpeg
+ffprobe

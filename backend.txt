@@ -10,15 +10,3 @@ POST /api/auth/refresh/ → refresh access token
 Body: { "refresh": "<refresh_token>" }
 
 GET /api/auth/me/ → return { "username": "...", "email": "..." } (requires Authorization: Bearer <access>)
-
-/api/recipes:
-    /get/{id} GET
-    /get/user GET
-    /get/search GET
-    /create POST
-    /edit POST
-
-model:
--title of the recipe
--reference to the user
--jsonfield
